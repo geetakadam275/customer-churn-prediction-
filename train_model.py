@@ -50,6 +50,8 @@ def risk_level(p):
 
 
 def main():
+    if not DATA_PATH.exists():
+        import generate_data
     df = load_and_clean(DATA_PATH)
     X = df.drop(columns=[TARGET, ID_COLUMN], errors="ignore")
     y = df[TARGET]

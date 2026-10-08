@@ -1,10 +1,25 @@
 # Customer Churn Prediction & Business Analytics System
 
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/)
+
 Predicts which customers are likely to leave, stores the results in a database,
-and shows everything in an easy dashboard.
+and shows everything in an easy-to-use business dashboard.
 
 **Team:** Gita Parmeshwar Kadam (23022521242057), Asmita Balaji Raut (23022521242059),
 Keshav Gajendra Rajurkar (23022521242058)
+
+## 🚀 Live Deployment to Streamlit Community Cloud (Free)
+
+This application is ready for 1-click cloud deployment:
+
+1. Go to [share.streamlit.io](https://share.streamlit.io/) and log in with your GitHub account (`geetakadam275`).
+2. Click **"New app"**.
+3. Fill in the repository details:
+   - **Repository:** `geetakadam275/customer-churn-prediction-`
+   - **Branch:** `main`
+   - **Main file path:** `app.py`
+4. Click **"Deploy!"**
+5. In ~1-2 minutes, your dashboard will be live on a public URL! Any time you push changes to GitHub, Streamlit Cloud will automatically update the app.
 
 ## How it works
 

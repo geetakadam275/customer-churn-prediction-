@@ -13,7 +13,7 @@ MODEL_PATH = BASE_DIR / "model" / "churn_model.joblib"
 METRICS_PATH = BASE_DIR / "model" / "metrics.json"
 IMPORTANCE_PATH = BASE_DIR / "model" / "feature_importance.csv"
 
-DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{BASE_DIR / 'churn.db'}")
+DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{(BASE_DIR / 'churn.db').as_posix()}")
 
 TARGET = "Churn"          # column with Yes/No values
 ID_COLUMN = "customerID"  # identifier column (not used for training)

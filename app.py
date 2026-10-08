@@ -9,24 +9,65 @@ from sqlalchemy import create_engine
 from config import (DATABASE_URL, HIGH_RISK_THRESHOLD, ID_COLUMN, IMPORTANCE_PATH,
                     MEDIUM_RISK_THRESHOLD, METRICS_PATH, MODEL_PATH, TARGET)
 
-st.set_page_config(page_title="Customer Churn Dashboard", layout="wide")
+st.set_page_config(page_title="Customer Churn Dashboard", page_icon="📊", layout="wide")
 st.title("Customer Churn Prediction & Business Analytics")
+
+
+def ensure_database_and_model():
+    """Ensure database table and model artifacts exist and can be loaded.
+    Auto-trains on cold start so cloud deployments (Streamlit Community Cloud)
+    never crash with a 'No data found' error."""
+    engine = create_engine(DATABASE_URL)
+    needs_init = False
+
+    # 1. Check if database exists and has customers
+    try:
+        with engine.connect() as conn:
+            from sqlalchemy import text
+            res = conn.execute(text("SELECT count(*) FROM customers"))
+            count = res.scalar()
+            if not count or count == 0:
+                needs_init = True
+    except Exception:
+        needs_init = True
+
+    # 2. Check if model and metric files exist
+    if not (MODEL_PATH.exists() and METRICS_PATH.exists() and IMPORTANCE_PATH.exists()):
+        needs_init = True
+    else:
+        # Check if model can be unpickled cleanly
+        try:
+            joblib.load(MODEL_PATH)
+        except Exception:
+            needs_init = True
+
+    if needs_init:
+        with st.spinner("Initializing analytics database and trained models..."):
+            import train_model
+            train_model.main()
 
 
 @st.cache_data
 def load_customers():
+    ensure_database_and_model()
     return pd.read_sql("SELECT * FROM customers", create_engine(DATABASE_URL))
 
 
 @st.cache_resource
 def load_model():
-    return joblib.load(MODEL_PATH)
+    try:
+        return joblib.load(MODEL_PATH)
+    except Exception:
+        import train_model
+        train_model.main()
+        return joblib.load(MODEL_PATH)
 
 
 try:
     df = load_customers()
-except Exception:
-    st.error("No data found. Run `python generate_data.py` and `python train_model.py` first.")
+except Exception as e:
+    st.error(f"Failed to load customer data: {e}")
+    st.info("Ensure `data/churn_data.csv` is present or run `python train_model.py`.")
     st.stop()
 
 tab1, tab2, tab3, tab4 = st.tabs(
@@ -72,7 +113,7 @@ with tab3:
     risky = (df[df["risk_level"].isin(level)]
              .sort_values("churn_probability", ascending=False))
     st.write(f"{len(risky):,} customers")
-    st.dataframe(risky, width="stretch")
+    st.dataframe(risky, use_container_width=True)
     st.download_button("Download as CSV", risky.to_csv(index=False), "high_risk_customers.csv")
 
 # --------------------------------------------------------- Predict a customer

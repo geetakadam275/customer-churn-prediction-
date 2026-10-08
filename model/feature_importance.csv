@@ -1,0 +1,18 @@
+feature,importance
+Contract_Month-to-month,1.2426984070269775
+Contract_Two year,0.9340745742097938
+tenure,0.6218920653113106
+MonthlyCharges,0.6126842527645723
+SupportCalls,0.45126422615138223
+Contract_One year,0.30763098531665284
+PaymentMethod_Electronic check,0.3015891127785874
+PaymentMethod_Mailed check,0.18391711361745036
+PaymentMethod_Bank transfer,0.17343301908619432
+InternetService_Fiber optic,0.17202308768931057
+InternetService_DSL,0.17013308025473536
+TotalCharges,0.14100331597651608
+gender_Male,0.09937671562734529
+gender_Female,0.09838386812683897
+SeniorCitizen,0.08165132263704467
+PaymentMethod_Credit card,0.05675386742554669
+InternetService_No,0.0008971599340321591
